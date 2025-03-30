@@ -137,10 +137,31 @@ Special thanks to:
 - The creators of the libinput library
 - Everyone who helped me learn Rust
 
+## 🔍 Troubleshooting
+
+If you encounter permission issues:
+- Make sure you're running with sudo
+- Check that your user has access to input devices
+- Verify that libinput is properly installed
+
+If devices aren't detected:
+- Check that your devices are recognized by the system (`lsusb`, `xinput list`)
+- Ensure udev is properly configured
+- Try reconnecting the devices
+
+If colors don't display correctly:
+- Make sure your terminal supports ANSI color codes
+- Try a different terminal emulator if colors appear broken
+
 ## 📄 License
 
 This project is under the MIT License - see the LICENSE file for details.
 
+## 👏 Acknowledgments
+
+- The libinput team for their excellent input handling library
+- The Rust community for the robust ecosystem 
+
 ---
 
-If you have any questions or suggestions, please open an issue! I'm still learning and would love your feedback. 😊 
+If you have any questions or suggestions, please open an issue! I'm still learning and would love your feedback. 😊
