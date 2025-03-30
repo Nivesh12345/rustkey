@@ -138,6 +138,9 @@ Special thanks to:
 - Everyone who helped me learn Rust
 
 <<<<<<< HEAD
+## 🔍 Troubleshooting
+=======
+<<<<<<< HEAD
 ## 📄 License
 
 This project is under the MIT License - see the LICENSE file for details.
@@ -149,6 +152,7 @@ If you have any questions or suggestions, please open an issue! I'm still learni
 
 
 ## Troubleshooting
+>>>>>>> c455b49d5e2589a34640d0bb7360588dc312b057
 
 If you encounter permission issues:
 - Make sure you're running with sudo
@@ -164,12 +168,19 @@ If colors don't display correctly:
 - Make sure your terminal supports ANSI color codes
 - Try a different terminal emulator if colors appear broken
 
-## License
+## 📄 License
 
-This project is licensed under the MIT License - see the LICENSE file for details.
+This project is under the MIT License - see the LICENSE file for details.
 
-## Acknowledgments
+## 👏 Acknowledgments
 
 - The libinput team for their excellent input handling library
 - The Rust community for the robust ecosystem 
+<<<<<<< HEAD
+
+---
+
+If you have any questions or suggestions, please open an issue! I'm still learning and would love your feedback. 😊
+=======
 >>>>>>> 84f6dc9399bd34c63a7b76f0222e801746282bf4
+>>>>>>> c455b49d5e2589a34640d0bb7360588dc312b057
