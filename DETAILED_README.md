@@ -1,14 +1,14 @@
-# RustKey Input Monitor - Code Explanation for Beginners
+# 🔍 RustKey Input Monitor - My Coding Journey
 
-Hello! This document will explain how our input monitoring program works, line by line, in simple terms. Think of this program as a curious little helper that watches what keys you press and how you move your mouse, and then tells you about it.
+Hey there, fellow coder! 👋 This is my little guide to help you understand how I built this input monitoring tool. I'll walk through my code line by line and explain everything in a way that hopefully makes sense, even if you're new to Rust like me!
 
-## What Does Our Program Do?
+## 🤔 What Was I Trying to Create?
 
-Our program is like a watchful friend who sits next to your keyboard and mouse and says things like "Oh! You just pressed the A key!" or "I see you're moving your mouse to the right!" It observes all your device inputs and reports them in a friendly way.
+I wanted to make something that could show me what's happening when I press keys or move my mouse. Think of it like a magical window into how your computer "sees" the things you do with your keyboard and mouse. I was curious about this, and thought it might help other people learn too!
 
-## Let's Break Down the Code
+## 🧩 Let's Break Down My Code
 
-### The Import Section
+### 📚 The Import Section
 
 ```rust
 use input::{Libinput, LibinputInterface};
@@ -20,19 +20,17 @@ use std::os::unix::{fs::OpenOptionsExt, io::OwnedFd};
 use std::path::Path;
 use std::time::Duration;
 use std::thread::sleep;
+use std::io::{self, Write};
 ```
 
-Imagine you're building something with LEGO. Before you start, you need to gather all the pieces you'll need. In programming, we do this with "use" statements. These lines tell our program to grab special tools we need:
+This part is like making a shopping list before cooking! Before I could start coding, I needed to tell Rust which special tools or "libraries" I wanted to use:
 
-- `input::{Libinput, LibinputInterface}` - This is our main tool for detecting keypresses and mouse movements
-- `input::event::pointer::Axis` - This helps us understand if the mouse is moving up/down or left/right
-- `KeyboardEventTrait` - This gives us special powers to understand keyboard events
-- `PointerScrollEvent` - This helps us understand when you scroll with your mouse wheel
-- `OpenOptions`, `OpenOptionsExt`, and `OwnedFd` - These help us talk to your computer's devices
-- `Path` - This helps us find files on your computer
-- `Duration` and `sleep` - These help our program take short naps so it doesn't use too much power
+- The `input` stuff helps me talk to keyboards and mice
+- `Path` helps find files on the computer
+- `Duration` and `sleep` let me make my program pause briefly
+- `io::Write` helps me display things nicely in the terminal
 
-### Constants for File Access
+### 🔢 Constants for File Access
 
 ```rust
 // Use constants directly instead of importing from libc
@@ -41,12 +39,12 @@ const O_WRONLY: i32 = 1;
 const O_RDWR: i32 = 2;
 ```
 
-These are like special codes that tell the computer how we want to access devices:
-- `O_RDONLY = 0` means "I only want to read from this device"
-- `O_WRONLY = 1` means "I only want to write to this device"
-- `O_RDWR = 2` means "I want to both read from and write to this device"
+These are like secret codes I use when I need to talk to devices. It's easier to remember "O_RDONLY" than just "0", right? 
+- `O_RDONLY` means "I only want to read information" (like listening)
+- `O_WRONLY` means "I only want to send information" (like talking)
+- `O_RDWR` means "I want to both send and receive" (like having a conversation)
 
-### Mouse State Tracking
+### 📝 Tracking Mouse Position
 
 ```rust
 // Track current mouse position
@@ -58,28 +56,37 @@ struct MouseState {
 }
 ```
 
-Think of this as a special notebook where we write down:
-- `x` - How far left or right the mouse is (horizontally)
-- `y` - How far up or down the mouse is (vertically)
-- `dx` - How much the mouse just moved left/right
-- `dy` - How much the mouse just moved up/down
+I created a special notebook to keep track of where the mouse is:
+- `x` and `y` tell me the current position (like coordinates on a map)
+- `dx` and `dy` tell me how much it just moved (like "2 steps east, 3 steps north")
 
-We use these to keep track of where your mouse is on the screen!
+The `f64` just means these numbers can have decimal points (like 123.45).
 
-### Our Interface
+### 🎨 Colors for Terminal
+
+```rust
+// Colors for terminal output (ANSI color codes)
+struct Colors;
+impl Colors {
+    const RESET: &'static str = "\x1b[0m";
+    const RED: &'static str = "\x1b[31m";
+    const GREEN: &'static str = "\x1b[32m";
+    // ... more colors ...
+}
+```
+
+This is my paint palette! I define different colors I can use to make the output pretty. These weird codes like `\x1b[31m` are special instructions that tell the terminal "Hey, start printing in red now!" 
+
+I spent a lot of time picking which colors to use for different things, and I'm pretty happy with how it turned out!
+
+### 🔌 The Interface to Talk with Devices
 
 ```rust
 struct Interface;
 
 impl LibinputInterface for Interface {
     fn open_restricted(&mut self, path: &Path, flags: i32) -> Result<OwnedFd, i32> {
-        OpenOptions::new()
-            .custom_flags(flags)
-            .read((flags & O_RDONLY != 0) | (flags & O_RDWR != 0))
-            .write((flags & O_WRONLY != 0) | (flags & O_RDWR != 0))
-            .open(path)
-            .map(|file| file.into())
-            .map_err(|err| err.raw_os_error().unwrap())
+        // ... code to open a device ...
     }
     fn close_restricted(&mut self, _fd: OwnedFd) {
         // OwnedFd automatically closes when dropped
@@ -87,13 +94,9 @@ impl LibinputInterface for Interface {
 }
 ```
 
-This part is like teaching our program how to talk to your keyboard and mouse. It's similar to how you need to know a special handshake to join a secret club:
+This was a tricky part! It's like teaching my program how to say "hello" and "goodbye" to the keyboard and mouse. The `open_restricted` function is how I start listening to a device, and `close_restricted` is how I politely end the conversation when I'm done.
 
-- `open_restricted` is like our way of saying "Hello, keyboard! I'd like to know when keys are pressed!"
-- It uses those special codes we defined earlier to determine if we're reading, writing, or both
-- `close_restricted` is our way of saying "Goodbye, keyboard! Thanks for telling me about the keys!"
-
-### Key Name Function
+### 📋 The Dictionary of Key Names
 
 ```rust
 // Helper function to convert key codes to more readable names
@@ -101,93 +104,112 @@ fn key_name(key_code: u32) -> &'static str {
     match key_code {
         1 => "ESC",
         28 => "ENTER",
-        14 => "BACKSPACE",
         // ... many more keys ...
         _ => "UNKNOWN KEY",
     }
 }
 ```
 
-This is like a translator! Your keyboard doesn't actually send letters like "A" or "B" - it sends numbers like 30 or 48. This function is like a dictionary that helps us translate:
-- If we receive `1`, it means the ESC key was pressed
-- If we receive `28`, it means the ENTER key was pressed
-- And so on for many other keys!
-- If we get a number we don't recognize, we call it "UNKNOWN KEY"
+This function is like a translator! When you press a key, the computer doesn't actually see "A" or "ENTER" - it sees numbers like 30 or 28. I made this function to convert those boring numbers into friendly names we can understand. 
 
-### Main Function
+The `match` keyword is super cool - it's like saying "if the key_code is 1, return 'ESC', if it's 28, return 'ENTER', and so on..."
+
+### 💫 Welcome Message Function
+
+```rust
+fn display_welcome_message() {
+    // Clear screen
+    print!("\x1c");
+    
+    println!("{}══════════════════════════════════════════════════════{}",
+        Colors::CYAN, Colors::RESET);
+    // ... more pretty welcome text ...
+    
+    // Force flush to ensure everything is displayed
+    io::stdout().flush().unwrap();
+}
+```
+
+This was my attempt to make a good first impression! The function displays a fancy welcome message with colors and borders. I even used emojis to make it more fun! 
+
+The `flush()` part makes sure everything gets displayed right away. Without it, sometimes the welcome message might not show up until later events happen, which would be weird.
+
+### 🚀 The Main Function - Where Everything Starts
 
 ```rust
 fn main() {
+    // Initialize libinput
     let mut input = Libinput::new_with_udev(Interface);
     input.udev_assign_seat("seat0").unwrap();
     
-    println!("=== 📥 Input Event Monitor ===");
-    println!("Waiting for input events... (press Ctrl+C to exit)");
-    println!("------------------------------------------");
+    // Show our fancy welcome message
+    display_welcome_message();
 
     // Track mouse state
     let mut mouse_state = MouseState {
-        x: 0.0,
-        y: 0.0,
-        dx: 0.0,
-        dy: 0.0,
+        x: 0.0, y: 0.0, dx: 0.0, dy: 0.0,
     };
+
+    // Track basic statistics
+    let mut key_press_count = 0;
+    let mut mouse_click_count = 0;
+    
+    // ... the main loop comes next ...
+}
 ```
 
-This is where our program starts working:
+This is where my program actually starts running! I:
+1. Set up the input library to listen to devices
+2. Display the welcome message
+3. Create the mouse position tracker starting at (0,0)
+4. Set up counters to keep track of key presses and mouse clicks
 
-1. We create a special helper called `input` that can detect keyboard and mouse actions
-2. We tell this helper to watch your main keyboard and mouse (that's what "seat0" means)
-3. We print a nice welcome message with emojis
-4. We create that special notebook to track mouse movements, starting at position (0,0)
+The `mut` keyword means these variables can change over time, which makes sense because the mouse position and counts will definitely change!
 
-### The Main Loop
+### 🔄 The Never-Ending Loop
 
 ```rust
+// Main event loop
 loop {
     input.dispatch().unwrap();
     
     for event in &mut input {
-        // ... handle different types of events ...
+        // ... handle different events ...
     }
     
     sleep(Duration::from_millis(5)); // Small sleep to reduce CPU usage
 }
 ```
 
-This is like saying "forever and ever, do the following":
+This is like the heartbeat of my program! The `loop` keyword means "keep doing this forever" (until someone presses Ctrl+C to exit). Every cycle:
 
-1. `input.dispatch()` - Check if there are any new events (keypresses or mouse movements)
-2. For each event we found, figure out what kind it is and report it
-3. Take a tiny nap (5 milliseconds - that's 0.005 seconds!) to save power
-4. Then start all over again!
+1. I check for new events with `input.dispatch()`
+2. I look at each event that happened
+3. I take a tiny nap (5 milliseconds) to save power
 
-### Handling Device Events
+Without that sleep, my program would use 100% of a CPU core, which seemed wasteful!
+
+### 📱 Handling Device Events
 
 ```rust
 match event {
     input::Event::Device(device_event) => {
         match device_event {
             input::event::DeviceEvent::Added(_device) => {
-                // DeviceAddedEvent doesn't have a name method we can use
-                println!("➕ Device Added");
+                println!("{}➕ Device Added{}", Colors::GREEN, Colors::RESET);
             },
-            input::event::DeviceEvent::Removed(_device) => {
-                // DeviceRemovedEvent doesn't have a name method we can use
-                println!("➖ Device Removed");
-            },
-            _ => println!("📱 Other Device Event"),
+            // ... handle other device events ...
         }
     },
+    // ... handle other event types ...
+}
 ```
 
-This is where we handle when devices get connected or disconnected:
+This is how I detect when devices are connected or disconnected. The `match` statement is like a smarter version of "if/else if/else" - it helps me handle different types of events in different ways.
 
-- If a new keyboard or mouse is plugged in, we print "➕ Device Added"
-- If a keyboard or mouse is unplugged, we print "➖ Device Removed"
-- If something else happens with a device, we print "📱 Other Device Event"
+I use green text for device connections because it seemed like a positive thing!
 
-### Handling Keyboard Events
+### ⌨️ Handling Keyboard Events
 
 ```rust
 input::Event::Keyboard(keyboard_event) => {
@@ -198,29 +220,30 @@ input::Event::Keyboard(keyboard_event) => {
         
         // Use key_state instead of state
         if key_event.key_state() == input::event::keyboard::KeyState::Pressed {
-            println!("⌨️  KEY PRESS DETECTED --> [ {} ] <-- (code: {})", key_text, key_code);
-            println!("🔠 YOU PRESSED: [ {} ]", key_text);
+            key_press_count += 1;
+            println!("{}⌨️  KEY PRESS DETECTED --> {}{}{} {}{} {}<-- (code: {}){}",
+                // ... lots of color formatting ...
+            );
+            println!("{}🔠 YOU PRESSED: [ {} ]{} (Total key presses: {})",
+                Colors::GREEN, key_text, Colors::RESET, key_press_count);
         } else {
-            println!("⌨️  KEY RELEASE DETECTED --> [ {} ] <-- (code: {})", key_text, key_code);
+            // ... handle key release ...
         }
     } else {
-        println!("⌨️  Other Keyboard Event");
+        // ... handle other keyboard events ...
     }
 },
 ```
 
-This is the exciting part where we detect keypresses!
+This was one of my favorite parts to write! When a key is pressed:
+1. I get the key code and translate it to a name
+2. I check if the key was pressed down or released
+3. I print a fancy message with colors and emojis
+4. I update the counter if it was pressed
 
-1. When a key event happens, we get the key code (a number)
-2. We translate that number to a name using our translator function
-3. We check if the key was pressed down or released
-4. If pressed:
-   - We print a fancy message like "⌨️ KEY PRESS DETECTED --> [ A ] <-- (code: 30)"
-   - We also print "🔠 YOU PRESSED: [ A ]" to make it super clear
-5. If released:
-   - We print something like "⌨️ KEY RELEASE DETECTED --> [ A ] <-- (code: 30)"
+I spent extra time making this part visually distinct so it's easy to see which key was pressed.
 
-### Handling Mouse Movement
+### 🖱️ Handling Mouse Movements
 
 ```rust
 input::event::PointerEvent::Motion(motion) => {
@@ -230,156 +253,90 @@ input::event::PointerEvent::Motion(motion) => {
     mouse_state.x += motion.dx();
     mouse_state.y += motion.dy();
     
-    println!("🖱️  Mouse motion - Position: ({:.2}, {:.2}), Delta: ({:.2}, {:.2})", 
-            mouse_state.x, mouse_state.y, mouse_state.dx, mouse_state.dy);
-},
-input::event::PointerEvent::MotionAbsolute(abs_motion) => {
-    // Update absolute mouse position
-    mouse_state.x = abs_motion.absolute_x();
-    mouse_state.y = abs_motion.absolute_y();
-    
-    println!("🖱️  Mouse absolute position: ({:.2}, {:.2})", 
-             mouse_state.x, mouse_state.y);
+    println!("{}🖱️  Mouse motion - Position: ({:.2}, {:.2}), Delta: ({:.2}, {:.2}){}",
+        Colors::CYAN, 
+        mouse_state.x, mouse_state.y, 
+        mouse_state.dx, mouse_state.dy, 
+        Colors::RESET);
 },
 ```
 
-This part handles when you move your mouse:
+This part updates the mouse position when it moves. The `.dx()` and `.dy()` functions tell me how much the mouse moved horizontally and vertically. I add these values to the current position to keep track of where the mouse is.
 
-1. `PointerEvent::Motion` is when you move your mouse relatively (like "I moved a little to the right")
-   - We update our notebook with how much the mouse moved
-   - We add this movement to the current position
-   - We print the current position and how much it just moved
+The `{:.2}` in the `println!` means "show these numbers with 2 decimal places" so they look nicer.
 
-2. `PointerEvent::MotionAbsolute` is when the computer tells us exactly where the mouse is
-   - We directly set our notebook to these exact coordinates
-   - We print the absolute position of the mouse
-
-### Handling Mouse Buttons
+### 👆 Handling Mouse Buttons
 
 ```rust
 input::event::PointerEvent::Button(button) => {
-    // Extract button number from debug representation
-    let debug_str = format!("{:?}", button);
-    let mut description = String::from("🖱️  Mouse button");
-    let mut button_num = 0;
-    
-    if debug_str.contains("button: ") {
-        // ... figure out which button was pressed ...
-    }
+    // Extract button number and convert to name...
     
     if debug_str.contains("Pressed") {
+        mouse_click_count += 1;
         description.push_str(" - PRESSED");
+        println!("{}{} at position: ({:.2}, {:.2}){} (Total clicks: {})",
+            Colors::MAGENTA, description, 
+            mouse_state.x, mouse_state.y, 
+            Colors::RESET, mouse_click_count);
     } else if debug_str.contains("Released") {
-        description.push_str(" - RELEASED");
+        // ... handle button release ...
     }
-    
-    // Add current position information
-    description.push_str(&format!(" at position: ({:.2}, {:.2})", 
-                        mouse_state.x, mouse_state.y));
-    
-    println!("{}", description);
 },
 ```
 
-This part detects when you click your mouse buttons:
+This detects mouse clicks! I had to do some string parsing to figure out which button was pressed (LEFT, RIGHT, MIDDLE, etc.). When a button is pressed:
+1. I increment the click counter
+2. I format a description with the button name and current mouse position
+3. I print it in a nice color
 
-1. We look at the button event information
-2. We figure out which button it was (LEFT, RIGHT, MIDDLE, etc.)
-3. We check if it was pressed or released
-4. We add the current mouse position from our notebook
-5. We print a message like "🖱️ Mouse button LEFT (272) - PRESSED at position: (123.45, 678.90)"
+The hardest part was figuring out the button numbers - 272 is left click, 273 is right click, etc.
 
-### Handling Mouse Wheel Scrolling
-
-```rust
-input::event::PointerEvent::ScrollWheel(scroll) => {
-    // Get scroll information using the correct Axis enum
-    // Fix the error by checking if axis is set first
-    let scroll_y = if scroll.has_axis(Axis::Vertical) {
-        scroll.scroll_value_v120(Axis::Vertical)
-    } else {
-        0.0
-    };
-    
-    let scroll_x = if scroll.has_axis(Axis::Horizontal) {
-        scroll.scroll_value_v120(Axis::Horizontal)
-    } else {
-        0.0
-    };
-    
-    println!("🖱️  Scroll wheel: horizontal: {:.2}, vertical: {:.2}", 
-             scroll_x, scroll_y);
-},
-```
-
-This part handles when you use the scroll wheel on your mouse:
-
-1. We check if the scroll event has vertical movement (up/down)
-   - If yes, we get the amount scrolled
-   - If no, we use 0.0 (no movement)
-2. We do the same for horizontal scrolling (left/right, if your mouse supports it)
-3. We print how much you scrolled in both directions
-
-### Handling Touch and Other Events
-
-```rust
-input::Event::Touch(touch_event) => {
-    // ... handle touch events ...
-},
-input::Event::Gesture(gesture_event) => {
-    // ... handle gesture events ...
-},
-input::Event::Tablet(_) => println!("✏️ Tablet Event"),
-input::Event::Switch(_) => println!("🔄 Switch Event"),
-_ => println!("⚠️ Other Event"),
-```
-
-This part handles all other kinds of input:
-
-1. Touch events - for touchscreens
-2. Gesture events - for multi-finger gestures on trackpads
-3. Tablet events - for drawing tablets
-4. Switch events - for special switches
-5. Any other events we didn't specifically program for
-
-### The Small Sleep
+### 🛑 Taking a Tiny Nap
 
 ```rust
 sleep(Duration::from_millis(5)); // Small sleep to reduce CPU usage
 ```
 
-This is our tiny nap at the end of each loop. Instead of constantly checking for new events as fast as possible (which would use a lot of power), we rest for 5 milliseconds. This makes our program more efficient without noticeably affecting how fast it responds to your actions.
+This is such a simple line, but it makes a big difference! Without it, my program would use 100% CPU. With it, it uses almost nothing. The program still feels instant because 5 milliseconds is so short.
 
-## How It All Works Together
+## 🧠 How It All Works Together
 
-1. We set up our tools and notebook
-2. We enter an endless loop
-3. During each loop:
-   - We check for new events
-   - If we find any, we figure out what type they are
-   - We handle each event appropriately (keyboard, mouse, etc.)
-   - We print friendly messages about what happened
-   - We take a tiny nap
-   - Then we start checking again
+1. I set up the system to monitor input devices
+2. I start an infinite loop to keep checking for events
+3. When events happen, I sort them by type (keyboard, mouse, etc.)
+4. I format the information in a pretty way with colors and emojis
+5. I print it to the terminal so you can see it
+6. I keep track of statistics like how many keys you've pressed
 
-This creates a program that constantly watches your input devices and tells you what's happening with them in a friendly, easy-to-understand way.
+## 🎁 Extra Features I'm Proud Of
 
-## Why Is This Useful?
+1. **Colors!** - Each type of event has its own color, making it easy to scan visually
+2. **Counters** - I keep track of how many keys you've pressed and how many times you've clicked
+3. **Detailed Position Info** - You can see exactly where your mouse is and how it moved
+4. **Pretty Formatting** - The borders and emojis make it much nicer to look at
+5. **Performance** - The tiny sleep makes it use very little CPU while still being responsive
 
-This program can help you:
-1. Learn how computers detect keypresses and mouse movements
-2. Test if your keyboard and mouse are working correctly
-3. See exactly what information your computer receives when you use input devices
-4. Understand the relationship between key codes and the actual keys you press
+## 💭 What I Want to Add Next
 
-It's like having X-ray vision to see what's happening inside your computer when you use it!
+- Logging events to a file
+- Configuration options (like changing colors)
+- A graphical interface instead of just text
+- Support for more types of devices
+- Heatmaps showing which keys you use most often
 
-## How to Experiment With the Code
+## 🎓 What I Learned Making This
 
-Try changing some things to see what happens:
-1. Change the key names in the `key_name` function
-2. Change the emoji icons to different ones
-3. Modify the messages that get printed
-4. Change the sleep time to see how it affects performance
+I was completely new to Rust when I started this project, so I learned tons!
+- How Rust's ownership system works
+- How to use external libraries
+- How to work with system-level APIs
+- How to format terminal output with colors
+- How to handle different types of events
 
-Programming is all about experimenting and learning, so have fun with it! 
+## 🤗 Final Thoughts
+
+This project was super fun to build! I'm still learning Rust, so there are probably better ways to do some of these things. If you have suggestions, I'd love to hear them!
+
+I hope this explanation helps you understand my code, and maybe even inspires you to try making something similar. Happy coding!
+
+~ Nivesh 
