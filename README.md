@@ -129,38 +129,7 @@ The most recent updates enhance the tool with:
 7. Better scroll wheel event reporting
 8. Enhanced touch and gesture event information
 
-## Setting Up a GitHub Repository
 
-To share your project on GitHub:
-
-1. Create a new repository on GitHub
-   - Go to https://github.com/new
-   - Name your repository (e.g., "rustkey")
-   - Add a description: "A beautiful input event monitoring tool for Linux"
-   - Choose public or private visibility
-   - Click "Create repository"
-
-2. Initialize your local Git repository (if not already done):
-   ```
-   cd libinput_project
-   git init
-   git add .
-   git commit -m "Initial commit: RustKey Input Monitor"
-   ```
-
-3. Link your local repository to GitHub:
-   ```
-   git remote add origin https://github.com/yourusername/rustkey.git
-   git branch -M main
-   git push -u origin main
-   ```
-
-4. Update the repository with future changes:
-   ```
-   git add .
-   git commit -m "Description of your changes"
-   git push
-   ```
 
 ## Troubleshooting
 
