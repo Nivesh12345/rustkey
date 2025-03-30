@@ -122,12 +122,6 @@ This started as a simple experiment to learn Rust, but I got really into it! I w
 - Adding configuration options
 - Maybe making a GUI version someday
 
-## 🙏 Thanks!
-
-Big thanks to everyone in the Rust community who helped me when I got stuck, and to the libinput developers for making such a cool library!
-
-If you try this out, let me know what you think. I'd love to hear your feedback or see your pull requests if you have ideas to make it better!
-
 ## 📄 License
 
 This project is under the MIT License - see the LICENSE file for details.
@@ -135,4 +129,4 @@ This project is under the MIT License - see the LICENSE file for details.
 ---
 
 Happy coding! 😊
-~ Nivesh 
+~ Nivesh
