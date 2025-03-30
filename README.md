@@ -1,76 +1,95 @@
-# RustKey Input Monitor
+# 🎮 RustKey Input Monitor
 
-A lightweight, detailed input event monitoring tool written in Rust that captures and displays keyboard, mouse, and other input device events in Linux systems. This tool uses the libinput library to monitor input devices in real-time with a beautiful, colorful terminal interface.
+Hey everyone! I'm excited to share my first Rust project - a colorful input event monitor that shows your keyboard and mouse activity in real-time! 
 
-## Features
+I built this while learning Rust and wanted to understand how our computers detect input events. It was super fun to make, and I thought others might find it useful or interesting too!
 
-- **Device Detection**: Shows when input devices are connected or disconnected
-- **Keyboard Monitoring**: Displays key presses and releases with human-readable key names
-- **Mouse Tracking**: Tracks and displays:
-  - Mouse position coordinates
-  - Mouse movement (delta values)
-  - Button clicks with human-readable button names
-  - Scroll wheel activity
-- **Touch Events**: Detects and displays touch-based input
-- **Gesture Recognition**: Identifies gesture-based interactions 
-- **Tablet Support**: Works with drawing tablets and stylus devices
-- **Beautiful UI**: Colorful terminal output with clear, visually distinct event types
-- **Statistics**: Keeps track of total key presses and mouse clicks
+<!-- TODO: Add a screenshot of the program running! -->
+<!-- ![RustKey Demo](https://i.imgur.com/your-image-here.jpg) -->
 
-## Prerequisites
+## ✨ What This Project Does
 
-- Linux operating system
-- Rust programming language (with Cargo)
-- libinput development package
-- Administrative/sudo privileges
+This tool shows you in real-time what's happening when you:
+- Type on your keyboard
+- Move your mouse
+- Click buttons
+- Use your touchpad
+- And more!
 
-### System Dependencies
+All displayed with pretty colors and helpful information.
 
-For Arch Linux:
-```
-sudo pacman -S libinput
-```
+## 💻 My Learning Journey
 
-For Ubuntu/Debian:
-```
-sudo apt install libinput-dev
-```
+I created this project to:
+- Understand how Linux handles input devices
+- Learn Rust programming (this is my first real Rust project!)
+- Play with terminal colors and interfaces
+- Share what I've learned with others
 
-For Fedora:
-```
-sudo dnf install libinput-devel
-```
+While working on this, I discovered how to:
+- Use Rust's pattern matching
+- Create a clean terminal UI
+- Work with system input libraries
+- Handle different types of events
 
-## Building the Project
+## 📋 Features I Implemented
 
-1. Clone the repository:
+- **Colorful Display**: Different events show up in different colors!
+- **Device Detection**: Shows when you plug in/remove keyboards, mice, etc.
+- **Keyboard Tracking**: Shows exactly which key you pressed
+- **Mouse Monitoring**: Tracks position, clicks, and scrolling
+- **Touch & Gesture Support**: Works with touchpads and touchscreens
+- **Stats Counter**: Keeps track of how many keys you've pressed and clicks you've made
+
+## 🛠️ How to Install
+
+This is a Rust project, so you'll need to have Rust installed. Then:
+
+1. Clone this repo:
    ```
-   git clone https://github.com/yourusername/rustkey.git
+   git clone https://github.com/Nivesh12345/rustkey.git
    cd rustkey/libinput_project
    ```
 
-2. Build the project using Cargo:
+2. Build it:
    ```
    cargo build
    ```
 
-## Running the Application
+3. You'll need these system packages too:
 
-Since this application needs to access input devices, it requires administrative privileges:
+   For Arch Linux:
+   ```
+   sudo pacman -S libinput
+   ```
+
+   For Ubuntu/Debian:
+   ```
+   sudo apt install libinput-dev
+   ```
+
+   For Fedora:
+   ```
+   sudo dnf install libinput-devel
+   ```
+
+## 🚀 Running It
+
+Since this needs to access your input devices, you'll need to run it with sudo:
 
 ```
 sudo ./target/debug/libinput_project
 ```
 
-For a release (optimized) build:
+For better performance:
 ```
 cargo build --release
 sudo ./target/release/libinput_project
 ```
 
-## Usage
+## 🌈 What You'll See
 
-Once running, the application will display a beautiful, colorful interface showing input events in real-time:
+When you run it, you'll get a beautiful display like this:
 
 ```
 ══════════════════════════════════════════════════════
@@ -83,106 +102,45 @@ Waiting for input events... (press Ctrl+C to exit)
 
 ------------------------------------------
 ➕ Device Added
-➕ Device Added
 🖱️  Mouse absolute position: (1254.23, 876.49)
 ⌨️  KEY PRESS DETECTED --> A <-- (code: 30)
 🔠 YOU PRESSED: [ A ] (Total key presses: 1)
-⌨️  KEY RELEASE DETECTED --> A <-- (code: 30)
 🖱️  Mouse button LEFT (272) - PRESSED at position: (1254.23, 876.49) (Total clicks: 1)
 ```
 
-To exit the application, press `Ctrl+C`.
+Just press Ctrl+C when you want to quit.
 
-## Understanding the Output
+## 🤔 Problems I Solved
 
-- **Device Events**:
-  - `➕ Device Added` - A new input device was connected (green)
-  - `➖ Device Removed` - An input device was disconnected (red)
+While making this, I had to figure out:
 
-- **Keyboard Events**:
-  - `⌨️  KEY PRESS DETECTED --> [ key name ] <-- (code: key_code)` - Shows which key was pressed (yellow/magenta)
-  - `🔠 YOU PRESSED: [ key name ]` - Clear indicator of the pressed key with key press counter (green)
-  - `⌨️  KEY RELEASE DETECTED --> [ key name ] <-- (code: key_code)` - Shows when a key is released (blue)
+1. How to get key names instead of just key codes
+2. How to track absolute vs. relative mouse movements
+3. How to add colors to make the output easier to understand
+4. How to detect different types of devices
 
-- **Mouse Events**:
-  - `🖱️  Mouse motion - Position: (x, y), Delta: (dx, dy)` - Shows relative mouse movement with position (cyan)
-  - `🖱️  Mouse absolute position: (x, y)` - Shows absolute mouse position (cyan)
-  - `🖱️  Mouse button [button name] (code) - PRESSED at position: (x, y)` - Shows mouse button activity with click counter (magenta)
-  - `🖱️  Scroll wheel: horizontal: [value], vertical: [value]` - Shows scroll wheel activity (cyan)
+It was challenging but fun!
 
-- **Other Events**:
-  - `👆 Touch Event: [type]` - Touch screen/pad events (magenta)
-  - `🤲 Gesture Event: [type]` - Multi-touch gesture events (magenta)
-  - `✏️ Tablet Event` - Drawing tablet events (yellow)
-  - `🔄 Switch Event` - Switch/toggle events (yellow)
+## 📝 What I Learned
 
-## Recent Modifications
+This project taught me a ton about:
+- Rust's ownership model
+- Working with system libraries
+- Terminal UI design
+- How input devices communicate with our computers
+- Using Git and GitHub for project management
 
-The most recent updates enhance the tool with:
+## 🙏 Thanks
 
-1. Beautiful colorful terminal output with ANSI color codes
-2. Stats tracking for key presses and mouse clicks
-3. Improved user interface with clear visual grouping of event types
-4. Comprehensive mouse position tracking (both absolute and relative)
-5. Improved key name mapping with broader keyboard support
-6. Detailed mouse button identification (LEFT, RIGHT, MIDDLE, etc.)
-7. Better scroll wheel event reporting
-8. Enhanced touch and gesture event information
+Special thanks to:
+- The Rust community for their great documentation
+- The creators of the libinput library
+- Everyone who helped me learn Rust
 
-## Setting Up a GitHub Repository
+## 📄 License
 
-To share your project on GitHub:
+This project is under the MIT License - see the LICENSE file for details.
 
-1. Create a new repository on GitHub
-   - Go to https://github.com/new
-   - Name your repository (e.g., "rustkey")
-   - Add a description: "A beautiful input event monitoring tool for Linux"
-   - Choose public or private visibility
-   - Click "Create repository"
+---
 
-2. Initialize your local Git repository (if not already done):
-   ```
-   cd libinput_project
-   git init
-   git add .
-   git commit -m "Initial commit: RustKey Input Monitor"
-   ```
-
-3. Link your local repository to GitHub:
-   ```
-   git remote add origin https://github.com/yourusername/rustkey.git
-   git branch -M main
-   git push -u origin main
-   ```
-
-4. Update the repository with future changes:
-   ```
-   git add .
-   git commit -m "Description of your changes"
-   git push
-   ```
-
-## Troubleshooting
-
-If you encounter permission issues:
-- Make sure you're running with sudo
-- Check that your user has access to input devices
-- Verify that libinput is properly installed
-
-If devices aren't detected:
-- Check that your devices are recognized by the system (`lsusb`, `xinput list`)
-- Ensure udev is properly configured
-- Try reconnecting the devices
-
-If colors don't display correctly:
-- Make sure your terminal supports ANSI color codes
-- Try a different terminal emulator if colors appear broken
-
-## License
-
-This project is licensed under the MIT License - see the LICENSE file for details.
-
-## Acknowledgments
-
-- The libinput team for their excellent input handling library
-- The Rust community for the robust ecosystem 
+If you have any questions or suggestions, please open an issue! I'm still learning and would love your feedback. 😊 
