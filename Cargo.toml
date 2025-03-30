@@ -1,0 +1,11 @@
+[package]
+name = "libinput_project"
+version = "0.1.0"
+edition = "2021"
+
+
+
+[dependencies]
+input = "0.9"       # For libinput bindings
+evdev = "0.10"      # For evdev bindings
+
