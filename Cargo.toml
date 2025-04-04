@@ -2,13 +2,10 @@
 name = "libinput_project"
 version = "0.1.0"
 edition = "2021"
-authors = ["Nivesh <nivesh@example.com>"]
 description = "🎮 RustKey Input Monitor - A colorful terminal application to visualize keyboard and mouse events in real-time"
 license = "MIT"
 readme = "README.md"
-repository = "https://github.com/nizos/rust-input-monitor"
-keywords = ["input", "keyboard", "mouse", "monitor", "terminal"]
-categories = ["command-line-utilities", "visualization"]
+
 
 
 
