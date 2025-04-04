@@ -1,10 +1,10 @@
 # 🎮 RustKey Input Monitor
 
-Hey there! 👋 I'm super excited to share my first Rust project with you! I built this cool input monitoring tool that shows you all your keyboard and mouse actions in real-time with pretty colors. This was both a learning exercise for me and something I thought might be useful for others.
+Hey there!. I built this input monitoring tool that shows you all your keyboard and mouse actions in real-time with pretty colors. This was both a learning exercise for me and something I thought might be useful for others.
 
 ## ✨ What Does It Do?
 
-My program watches your keyboard and mouse inputs and displays them in a colorful way in your terminal. It's like having X-ray vision into how your computer sees your inputs! Here's what it can show:
+My program watches your keyboard and mouse inputs and displays them in a colorful way in your terminal. Here's what it can show:
 
 - 🖮 **Keyboard Stuff**: See exactly which keys you're pressing with fun colorful messages
 - 🖱️ **Mouse Movements**: Track where your mouse is on screen and how it's moving
@@ -103,7 +103,7 @@ While making this project, I learned a ton about:
 4. Converting raw input codes to human-readable text
 5. Tracking statistics of user behavior
 
-I'm still new to Rust, so there might be better ways to do some things - feel free to suggest improvements!
+<!--I'm still new to Rust, so there might be better ways to do some things - feel free to suggest improvements!-->
 
 ## ❓ Troubleshooting
 
