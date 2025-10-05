@@ -1,13 +1,3 @@
-# 🧹 RustKey Project .gitignore
-# ===========================
-# 
-# Hi there! This is my personal .gitignore file for the RustKey project.
-# It helps keep my repository clean by telling Git which files to ignore.
-# 
-# I've customized it for Rust development and my personal workflow.
-# Feel free to adjust it for your own needs!
-# 
-# 😊 - Nivesh
 
 # Rust specific ignores
 /target/

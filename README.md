@@ -1,76 +1,88 @@
-# 🎮 RustKey Input Monitor
+# RustKey Input Monitor
 
-Hey there!. I built this input monitoring tool that shows you all your keyboard and mouse actions in real-time with pretty colors. This was both a learning exercise for me and something I thought might be useful for others.
+A real-time input event visualization tool built in Rust that provides comprehensive monitoring of keyboard, mouse, and touch events with detailed statistics and colorful terminal output.
 
-## ✨ What Does It Do?
+## Features
 
-My program watches your keyboard and mouse inputs and displays them in a colorful way in your terminal. Here's what it can show:
+### Core Functionality
+- **Real-time Input Monitoring**: Captures and displays keyboard, mouse, touch, and gesture events as they occur
+- **Cross-Device Support**: Works with keyboards, mice, touchpads, touchscreens, and drawing tablets
+- **Event Statistics**: Tracks key press counts, mouse click counts, and device connection events
+- **High-Performance Processing**: Optimized event loop with minimal CPU overhead
 
-- 🖮 **Keyboard Stuff**: See exactly which keys you're pressing with fun colorful messages
-- 🖱️ **Mouse Movements**: Track where your mouse is on screen and how it's moving
-- 👆 **Clicks & Scrolls**: See when and where you click and scroll
-- 📱 **Device Changes**: Know when devices connect or disconnect
-- 👐 **Touch & Gestures**: Works with touchscreens and touchpads too!
+### Technical Capabilities
+- **System-Level Integration**: Uses Linux libinput library for low-level input device access
+- **Comprehensive Key Mapping**: Supports 100+ key codes including function keys, modifiers, numpad, and media keys
+- **Mouse Position Tracking**: Real-time absolute and relative mouse position monitoring
+- **Scroll Event Detection**: Captures horizontal and vertical scroll events with precise values
+- **Device Hot-Plugging**: Automatically detects when input devices are connected or disconnected
 
-I was really proud when I got the colors working - it makes everything so much easier to understand!
+### User Experience
+- **Color-Coded Output**: ANSI color coding for different event types (keyboard, mouse, touch, etc.)
+- **Detailed Event Information**: Shows key codes, button mappings, coordinates, and timing
+- **Professional Terminal Interface**: Clean, organized display with proper formatting
+- **Real-Time Feedback**: Instant visualization of all input events
 
-## 📋 What You'll Need
+## Technical Architecture
 
-To run my project, you'll need:
+### Dependencies
+- **libinput**: Linux input handling library for device abstraction
+- **evdev**: Linux event device interface for low-level input access
+- **Rust Standard Library**: Core functionality for file handling, threading, and I/O
 
-- A Linux computer (I'm using Arch Linux but other distros should work too)
-- Rust and Cargo installed
-- The libinput development package
-- Admin (sudo) rights since we need to access input devices
+### Key Components
+- **Event Loop**: Non-blocking event processing with 5ms polling interval
+- **Device Interface**: Custom libinput interface implementation for device access
+- **State Management**: Mouse position tracking and statistics accumulation
+- **Color System**: ANSI escape sequences for terminal output formatting
 
-### 📦 Installing Dependencies
+## System Requirements
 
-I had to install some packages first. Depending on your Linux flavor, run one of these:
+### Supported Platforms
+- **Linux**: Arch Linux, Ubuntu/Debian, Fedora, and other distributions
+- **Permissions**: Requires root access (sudo) for input device access
+- **Dependencies**: libinput development libraries
 
-For Arch Linux (that's what I use!):
-```
+### Installation Requirements
+
+#### Arch Linux
+```bash
 sudo pacman -S libinput
 ```
 
-For Ubuntu/Debian:
-```
+#### Ubuntu/Debian
+```bash
 sudo apt install libinput-dev
 ```
 
-For Fedora:
-```
+#### Fedora
+```bash
 sudo dnf install libinput-devel
 ```
 
-## 🚀 Getting Started
+## Installation & Usage
 
-I was really excited when I finally got this working! Here's how you can try it too:
+### Quick Start
+```bash
+# Clone the repository
+git clone https://github.com/Nivesh12345/rustkey.git
+cd rustkey
 
-1. First, grab my code:
-   ```
-   git clone https://github.com/Nivesh12345/rustkey.git
-   cd rustkey/libinput_project
-   ```
+# Build the project
+cargo build
 
-2. Build the project (this might take a minute):
-   ```
-   cargo build
-   ```
-
-3. Run it (needs sudo to access your input devices):
-   ```
-   sudo ./target/debug/libinput_project
-   ```
-
-If you want a faster version for everyday use, you can build an optimized release:
+# Run with elevated privileges
+sudo ./target/debug/libinput_project
 ```
+
+### Production Build
+```bash
+# Optimized release build
 cargo build --release
 sudo ./target/release/libinput_project
 ```
 
-## 🎨 What You'll See
-
-When you run it, you'll get this pretty display in your terminal:
+## Output Example
 
 ```
 ══════════════════════════════════════════════════════
@@ -91,42 +103,72 @@ Waiting for input events... (press Ctrl+C to exit)
 🖱️  Mouse button LEFT (272) - PRESSED at position: (1254.23, 876.49) (Total clicks: 1)
 ```
 
-I spent a lot of time making the colors look nice! Green for good things, red for warnings, cyan for mouse stuff, and so on. The program also counts how many keys you've pressed and how many times you've clicked, which I thought was a cool addition.
+## Event Types Supported
 
-## 🛠️ Things I Learned
+### Keyboard Events
+- Key press/release detection
+- Comprehensive key code mapping (letters, numbers, function keys, modifiers)
+- Special key support (arrow keys, numpad, media keys)
+- Real-time key press statistics
 
-While making this project, I learned a ton about:
+### Mouse Events
+- Absolute and relative position tracking
+- Button press/release detection (left, right, middle, side buttons)
+- Scroll wheel events (horizontal and vertical)
+- Click count statistics
 
-1. How Rust works with system inputs
-2. Adding colors to terminal output
-3. Working with real-time events
-4. Converting raw input codes to human-readable text
-5. Tracking statistics of user behavior
+### Touch & Gesture Events
+- Touch screen input detection
+- Gesture recognition
+- Multi-touch support
 
-<!--I'm still new to Rust, so there might be better ways to do some things - feel free to suggest improvements!-->
+### Device Management
+- Hot-plug detection
+- Device connection/disconnection events
+- Multiple device support
 
-## ❓ Troubleshooting
+## Development
 
-Some problems I ran into that you might face too:
+- **Event Processing**: Custom libinput interface with proper error handling
+- **Memory Management**: Efficient state tracking with minimal allocations
+- **Performance**: Optimized polling loop with configurable sleep intervals
+- **Error Handling**: Robust error management for device access and system calls
 
-- **"Permission denied" errors**: Make sure you're using sudo!
-- **Input devices not showing up**: Try unplugging and plugging them back in
-- **Colors look weird**: Some terminals don't support all the colors - try a different terminal app
+## Troubleshooting
 
-## 📝 My Journey & Future Plans
+### Common Issues
 
-This started as a simple experiment to learn Rust, but I got really into it! I want to add more features in the future like:
+**Permission Denied Errors**
+```bash
+# Ensure you're running with elevated privileges
+sudo ./target/rebug/libinput_project
+```
 
-- Saving logs to a file
-- Creating heatmaps of keyboard and mouse usage
-- Adding configuration options
-- Maybe making a GUI version someday
+**Input Devices Not Detected**
+- Verify libinput is properly installed
+- Check device permissions in `/dev/input/`
+- Try unplugging and reconnecting devices
 
-## 📄 License
+**Terminal Display Issues**
+- Ensure your terminal supports ANSI color codes
+- Try different terminal emulators (GNOME Terminal, Konsole, etc.)
 
-This project is under the MIT License - see the LICENSE file for details.
+## Future Enhancements
+
+### Planned Features
+- **Configuration System**: Customizable color schemes and event filtering
+- **Logging Capabilities**: Save event data to files for analysis
+- **Performance Metrics**: Detailed statistics and usage analytics
+- **GUI Interface**: Optional graphical user interface
+- **Cross-Platform Support**: Windows and macOS compatibility
+
+### Technical Improvements
+- **Async/Await**: Modern async event handling
+- **Plugin System**: Extensible event processing architecture
+- **Performance Profiling**: Built-in performance monitoring
+- **Unit Testing**: Comprehensive test coverage
+
 
 ---
 
-Happy coding! 😊
-~ Nivesh
+*Built with Rust for high-performance input event monitoring and visualization*

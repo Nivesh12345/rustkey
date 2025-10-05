@@ -1,26 +1,3 @@
-/*
- * 🎮 RustKey Input Monitor 🎮
- * ===========================
- * 
- * Hey there! 👋 Welcome to my little project!
- * 
- * This is a colorful terminal app I built while learning Rust.
- * It lets you see all your keyboard and mouse events in real-time with pretty colors!
- * 
- * I created this because I was curious about how input devices communicate with
- * the system, and I thought it would be fun to visualize it in a beautiful way.
- * 
- * Features I'm proud of:
- * - 🌈 Colorful output that makes different events easy to spot
- * - 📊 Stats tracking for key presses and mouse clicks  
- * - 🖱️ Real-time mouse position tracking
- * - ⌨️ Detailed keyboard event visualization
- * 
- * I hope you find this tool as fun to use as I found it to build!
- * 
- * Created with ❤️ by Nivesh
- * GitHub: https://github.com/Nivesh12345/rustkey
- */
 
 use input::{Libinput, LibinputInterface};
 use input::event::pointer::Axis;
